@@ -1,20 +1,17 @@
 package DNA.Prueba.Service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 import DNA.Prueba.Repository.entity.Persona;
 
 public interface PersonaService {
+    Persona crearPersona(String nombre, String apellido, String direccion, String email, String cromosoma);
 
-    List<Persona> getAllPersonas();
+    Persona obtenerPersonaPorId(Long id);
 
-    Optional<Persona> getPersonaById(Long id);
+    Persona actualizarPersona(Long id, String nombre, String apellido, String direccion, String email, String cromosoma);
 
-    Persona savePersona(Persona persona);
+    void eliminarPersona(Long id);
 
-    void deletePersona(Long id);
-
-    Optional<Persona> findByCromosoma(String muestraCromosoma);
+    ResponseEntity<String> buscarSospechoso(String muestraADN);
 }
-

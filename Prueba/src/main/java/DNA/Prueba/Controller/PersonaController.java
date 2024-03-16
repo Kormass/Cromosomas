@@ -1,40 +1,30 @@
 package DNA.Prueba.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import DNA.Prueba.Repository.entity.Persona;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import DNA.Prueba.Service.PersonaService;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/personas")
 public class PersonaController {
 
-    @Autowired
-    private PersonaService personaService;
+    private final PersonaService personaService;
 
-    @GetMapping
-    public List<Persona> getAllPersonas() {
-        return personaService.getAllPersonas();
+    public PersonaController(PersonaService personaService) {
+        this.personaService = personaService;
     }
 
-    @GetMapping("/{id}")
-    public Persona getPersonaById(@PathVariable Long id) {
-        return personaService.getPersonaById(id).orElse(null);
+    @GetMapping("/buscar-sospechoso")
+    public ResponseEntity<String> buscarSospechoso(@RequestParam String muestraADN) {
+        ResponseEntity<String> sospechoso = personaService.buscarSospechoso(muestraADN);
+        if (sospechoso != null) {
+            return new ResponseEntity<>("El sospechoso es: " + sospechoso, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No se encontró ningún sospechoso.", HttpStatus.NOT_FOUND);
+        }
     }
-
-    @PostMapping
-    public Persona createPersona(@RequestBody Persona persona) {
-        return personaService.savePersona(persona);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePersona(@PathVariable Long id) {
-        personaService.deletePersona(id);
-    } 
 }
-
-
-   
-
 
